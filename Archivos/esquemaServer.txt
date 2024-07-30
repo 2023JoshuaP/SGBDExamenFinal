@@ -1,0 +1,5 @@
+Server3
+postid              int       4    
+userid              int       4    
+pdate               str       10   
+content             str       30   

@@ -1,0 +1,51 @@
+post , user , pdate      , content                       
+28   , 101  , 10/3/2010  , Hola Mundo.                   
+4    , 102  , 11/5/2010  , Buenos Días.                 
+19   , 103  , 14/6/2010  , ¿Cómo estás?               
+9    , 104  , 15/8/2010  , Feliz día.                   
+45   , 105  , 23/10/2010 , Semana de Estudio.            
+6    , 106  , 31/12/2010 , Feliz año nuevo.             
+33   , 107  , 1/1/2011   , Bienvenido 2011.              
+11   , 108  , 2/1/2011   , Nueva aventura.               
+22   , 109  , 3/1/2011   , Comenzando el año.           
+3    , 110  , 4/1/2011   , Metas nuevas.                 
+42   , 111  , 5/1/2011   , Éxito en 2011.               
+15   , 112  , 6/1/2011   , Saludos cordiales.            
+12   , 113  , 7/1/2011   , Año de retos.                
+20   , 114  , 8/1/2011   , Muchos éxitos.               
+16   , 115  , 9/1/2011   , Proyectos nuevos.             
+14   , 116  , 10/1/2011  , Nuevas oportunidades.         
+38   , 117  , 11/1/2011  , A por más.                   
+19   , 118  , 12/1/2011  , Un gran año.                 
+27   , 119  , 13/1/2011  , Con todo el ánimo.           
+17   , 120  , 14/1/2011  , Adelante siempre.             
+21   , 121  , 15/1/2011  , Cumpliendo metas.             
+36   , 122  , 16/1/2011  , En crecimiento.               
+23   , 123  , 17/1/2011  , Avanzando.                    
+5    , 124  , 18/1/2011  , Esperanza.                    
+25   , 125  , 19/1/2011  , Alegría.                     
+1    , 126  , 20/1/2011  , Optimismo.                    
+7    , 127  , 21/1/2011  , Valor.                        
+44   , 128  , 22/1/2011  , Fuerza.                       
+29   , 129  , 23/1/2011  , Decisión.                    
+2    , 130  , 24/1/2011  , Entusiasmo.                   
+31   , 131  , 25/1/2011  , Dinamismo.                    
+32   , 132  , 26/1/2011  , Actitud.                      
+46   , 133  , 27/1/2011  , Compromiso.                   
+24   , 134  , 28/1/2011  , Resiliencia.                  
+35   , 135  , 29/1/2011  , Innovación.                  
+10   , 136  , 30/1/2011  , Creatividad.                  
+50   , 137  , 31/1/2011  , Iniciativa.                   
+18   , 138  , 1/2/2011   , Perseverancia.                
+39   , 139  , 2/2/2011   , Dedicación.                  
+40   , 140  , 3/2/2011   , Responsabilidad.              
+41   , 141  , 4/2/2011   , Trabajo en equipo.            
+43   , 142  , 5/2/2011   , Colaboración.                
+26   , 143  , 6/2/2011   , Liderazgo.                    
+47   , 144  , 7/2/2011   , Integridad.                   
+30   , 145  , 8/2/2011   , Honestidad.                   
+13   , 146  , 9/2/2011   , Transparencia.                
+8    , 147  , 10/2/2011  , Confianza.                    
+48   , 148  , 11/2/2011  , Empatía.                     
+37   , 149  , 12/2/2011  , Amabilidad.                   
+34   , 150  , 13/2/2011  , Generosidad.                  
