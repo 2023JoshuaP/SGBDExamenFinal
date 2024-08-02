@@ -18,8 +18,8 @@ void BufferPool::mostrarFramePagina(int numFrame) {
     this->vectorFramesBufferPool[numFrame].paginaEnFrame.mostrarContenidoDePagina();
 }
 
-void BufferPool::lecturaOescrituraPagina(int numFrame) {
-    this->vectorFramesBufferPool[numFrame].paginaEnFrame.leerOescribirEnPagina();
+void BufferPool::lecturaOescrituraPagina(int numFrame, BPlusTree* Btree) {
+    this->vectorFramesBufferPool[numFrame].paginaEnFrame.leerOescribirEnPagina(Btree);
 }
 
 void BufferPool::agregarContenidoPaginaAbloque(int numFrame, int numPaginaEliminada) {
