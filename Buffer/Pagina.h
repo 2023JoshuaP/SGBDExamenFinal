@@ -17,7 +17,7 @@ class Pagina{
         void recogerRegistros(int numPagina);
         void mostrarContenidoDePagina();
         bool verificarPaginaVacia();
-        void leerOescribirEnPagina();
+        void leerOescribirEnPagina(BPlusTree* Btree);
         void agregarContenido(int numPaginaEliminada);
         bool buscarRegistro(string& registroPagina);
         void añadirRegistro(string& registroPagina);
