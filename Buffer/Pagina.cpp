@@ -2,6 +2,7 @@
 //#include "../megatron2/data_manager.cpp"
 //#include "../megatron2/pesos.cpp"
 #include <algorithm>
+//#include "../Acceso/BPlusTree.cpp"
 
 Pagina::Pagina() {}
 
@@ -45,7 +46,6 @@ void Pagina::recogerRegistros(int numPaginaEliminada) {
         componentes.push_back(valor2);
     }
 
-  
     if (componentes.size() >= 1) { 
         rutaBloqueEscribir ="../Disco/Disco/Plato " + componentes[0] + "/Superficie " + componentes[1] + "/Pista " + componentes[2] + "/Bloque " + componentes[3] + ".txt";
     } else {
@@ -75,11 +75,49 @@ void Pagina::mostrarContenidoDePagina() {
         cout << this->vectorRegistrosEnPagina[i] << endl;
     }
     cout << "------------------------------------------------------------------------" << endl;
-    
 }
-void Pagina::leerOescribirEnPagina() {
-    int opcion;
+void insertionRegister(BPlusTree* Btree, string data, int rolNo) {
+    cout << "rolNo= " << rolNo << endl;
+    cout << "Data a añadir " << data << endl;
+    //cout << "Ingrese nueva data: ";
+    //getline(cin, data);
 
+    string fileName = "../Archivos/" + to_string(rolNo) + ".txt";
+
+    ifstream infile(fileName);
+    if (infile.good()) {
+        infile.close();
+        FILE* filePtr = fopen(fileName.c_str(), "a");  // Open the file in append mode
+        if (filePtr == NULL) {
+            perror("Error al abrir el archivo");
+            return;
+        }
+        (Btree)->insert(rolNo, filePtr, data);
+    } else {
+        FILE* filePtr = fopen(fileName.c_str(), "w");
+        if (filePtr == NULL) {
+            perror("Error al crear el archivo");
+            return;
+        }
+        string userTuple = to_string(rolNo) + " " + data + "\n";
+        fprintf(filePtr, "%s", userTuple.c_str());
+        fclose(filePtr);
+        (Btree)->insert(rolNo, filePtr, data);
+        cout << "Inserción del rol: " << rolNo << " exitosa." << endl;
+    }
+}
+
+void deletionRegister(BPlusTree* BTree, int tmp) {
+    cout << "Showing you the Tree, Choose a key from here: " << endl;
+    //BTree->display(BTree->getRoot());
+    BTree->removeKey(tmp);
+    //Displaying
+    BTree->display(BTree->getRoot());
+}
+
+void Pagina::leerOescribirEnPagina(BPlusTree* Btree) {
+    int opcion;
+    int id;
     do {
         int filaAencontrar;
         string registroNuevo;
@@ -134,112 +172,50 @@ void Pagina::leerOescribirEnPagina() {
             this->vectorRegistrosEnPagina[filaAencontrar] = cadenaFinal;
             cout << "Guardado" << endl;
             cout << "------------------------------------------------------------------------" << endl;
+
         } else if (opcion == 2) {
             cout << "-------------Eliminacion de registros-----------" << endl;
-            cout << "Fila a eliminar: "; 
-            cin >> filaAencontrar;
+            cout << "ID registro a eliminar: "; 
+            cin >> id;
             cin.ignore();
-            this->vectorRegistrosEnPagina[filaAencontrar] = " ";
-        } else if (opcion == 3) {
-            int OpcionRegistro;
-            cout << "-------------Agregar nuevo registro-----------" << endl;
-            cout << "(1) Longitud Fija" << endl;
-            cout << "(2) Longitud Variable" << endl;
-            cout << "Opcion? ";
-            cin >> OpcionRegistro;
-            
-            string fileName = "../Archivos/esquema.txt";
-            ifstream file(fileName);
+            deletionRegister(Btree, id);
 
-            if (!file.is_open()) {
-                cerr << "No se pudo abrir el archivo: " << fileName << endl;
-                continue;
-            }
-
-            string line;
-            vector<int> ultimosValores;
-
-            while (getline(file, line)) {
-                stringstream ss(line);
-                string word;
-                vector<string> words;
-
-                while (ss >> word) {
-                    words.push_back(word);
-                }
-
-                if (!words.empty()) {
-                    try {
-                        int ultimoValor = stoi(words.back());
-                        ultimosValores.push_back(ultimoValor);
-                    } catch (const invalid_argument &e) {
-                        // Manejo del error
+            for (size_t i = 0; i < this->vectorRegistrosEnPagina.size(); ++i) {
+                stringstream ss(this->vectorRegistrosEnPagina[i]);
+                string idStr;
+                getline(ss, idStr, ',');
+                
+                try {
+                    if (stoi(idStr) == id) {
+                        this->vectorRegistrosEnPagina.erase(this->vectorRegistrosEnPagina.begin() + i);
+                        break;
                     }
+                } catch (const std::invalid_argument& e) {
+                    cout << "Error: El registro " << this->vectorRegistrosEnPagina[i] << " tiene un ID inválido." << endl;
+                    continue;
                 }
             }
 
-            file.close();
-
-            if (OpcionRegistro == 1) {
-                string name_archivo_relacion;
-                string nuevo_registro;
-                cout << "Archivo relacion ? " << endl;
-                cin >> name_archivo_relacion;
-
-                ifstream archivo_relacion(name_archivo_relacion);
-                ifstream archivo_esquema("../Archivos/esquema.txt");
-                string linea_relacion;
-                string data_insert_relacion;
-                string linea_esquema;
-                bool primer_valor;
-                int peso_cadena = 0;
-                int peso_string;
-                size_t i = 0;
-
-                while (getline(archivo_relacion, linea_relacion)) {
-                    primer_valor = false;
-                    stringstream ss(linea_relacion);
-                    string valor_relacion;
-                    bool tipo_dato_aceptado = true;
-                    do {
-                        cout << linea_relacion << endl;
-                        cout << "Insert data: ";
-                        cin >> data_insert_relacion;
-
-                        while (getline(ss, valor_relacion, ',')) {
-                            if (primer_valor) {
-                                for (i; i < ultimosValores.size(); i) {
-                                    cout << "El valor considerado fue " << ultimosValores[i] << endl;
-                                    if (valor_relacion == "string" || valor_relacion == "int" || valor_relacion == "float") {
-                                        cout << "Tipo de dato aceptado" << endl;
-                                        int peso_cadena = data_insert_relacion.length();
-                                        peso_string = ultimosValores[i];
-                                        while (peso_cadena < peso_string) {
-                                            data_insert_relacion += " ";
-                                            peso_cadena++;
-                                        }
-                                        nuevo_registro += data_insert_relacion + ' ';
-                                    } else {
-                                        cout << "Tipo de dato no aceptado" << endl;
-                                        tipo_dato_aceptado = false;
-                                    }
-                                    i++;
-                                    break;
-                                }
-                            } else {
-                                primer_valor = true;
-                            }
-                        }
-                        if (tipo_dato_aceptado) {
-                            break;
-                        }
-                    } while (true);
-                }
-
-                this->vectorRegistrosEnPagina.push_back(nuevo_registro);
-                cout << "Registro agregado" << endl;
-                cout << "------------------------------------------------------------------------" << endl;
+            cout << "Registros actualizados:" << endl;
+            for (const auto& registro : vectorRegistrosEnPagina) {
+                cout << registro << endl;
             }
+        }
+        else if (opcion == 3) {
+            int rolNo;
+            string data;
+            cout << "-------------Agregar nuevo registro-----------" << endl;
+            cout << "(1) Key a ingresar" << endl;
+            cin >> rolNo;
+            cout << "(2) Data nueva a ingresar" << endl;
+            cin >> data;
+            getline(cin, data);
+
+            insertionRegister(Btree, data, rolNo);
+            this->vectorRegistrosEnPagina.push_back(data);
+            
+            cout << "Registro agregado" << endl;
+            cout << "------------------------------------------------------------------------" << endl;
         }
     } while (opcion != 4);
     cout << "Regresando al menú principal..." << endl;
@@ -270,14 +246,14 @@ bool Pagina::buscarRegistro(string& registro) {
             }
         }
         return false;
-    }
+}
 
 void Pagina::añadirRegistro(string& registro) {
     this->vectorRegistrosEnPagina.push_back(registro);
 }
 
 void Pagina::agregarContenido(int numPaginaEliminada) {
-    string rutaDirectorio = "../megatron2/directorio";
+    string rutaDirectorio = "../megatron2/directorio.txt";
     ifstream directorio(rutaDirectorio);
     string rutaBloqueEscribir;
     string linea;
@@ -319,6 +295,7 @@ void Pagina::agregarContenido(int numPaginaEliminada) {
         }
         rutaBloque.close();
         cout << "Contenido de página en memoria mandado a bloque correctamente" << endl;
+        cout << "La ruta donde se guardo el registro es: " << rutaBloqueEscribir << endl;
     }
     // Preguntar al usuario si también desea guardar en disco
     char respuesta;
@@ -337,6 +314,7 @@ void Pagina::agregarContenido(int numPaginaEliminada) {
             }
             rutaBloqueDisco.close();
             cout << "Contenido de página en memoria mandado a disco correctamente" << endl;
+            cout << "La ruta donde se guardo el registro es: " << rutaBloqueEscribirDisco << endl;
         }
     }
 }
