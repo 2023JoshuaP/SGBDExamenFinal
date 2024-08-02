@@ -178,12 +178,11 @@ void menuBufferManager(BufferManager &bufferManagerPrincipal) {
     
     cout << "Creación de estructura Básica de BufferManager implementado." << endl;
 }
-void menuBuffer(BufferManager &bufferManagerPrincipal) {   
+void menuBuffer(BPlusTree* BTree, BufferManager &bufferManagerPrincipal) {   
     int opcion = 0;
     int numPagina;
     int numFrame;
     int opcionPaginaGuardado;
-
     while (opcion != 8) {
         cout << endl;
         cout << "------- Menú Principal Programa Buffer Manager -------" << endl;
@@ -261,7 +260,7 @@ void menuBuffer(BufferManager &bufferManagerPrincipal) {
                     break;
                 }
                 else if (accionPagina == 'W' || accionPagina == 'w') {
-                    bufferManagerPrincipal.bufferPool.lecturaOescrituraPagina(numFrame);
+                    bufferManagerPrincipal.bufferPool.lecturaOescrituraPagina(numFrame, BTree);
                     bufferManagerPrincipal.pageTable.aumentarPinCountDePagina(numPagina);
                     
                     if (noEscrituraEnCola(numPagina) == true)
@@ -352,8 +351,6 @@ void menuBuffer(BufferManager &bufferManagerPrincipal) {
     }
 }
 
-#include <fstream>
-
 void insertionNode(BPlusTree** Btree) {
     int rolNo;
     string data;
@@ -370,7 +367,7 @@ void insertionNode(BPlusTree** Btree) {
     ifstream infile(fileName);
     if (infile.good()) {
         infile.close();
-        FILE* filePtr = fopen(fileName.c_str(), "a");
+        FILE* filePtr = fopen(fileName.c_str(), "a");  // Open the file in append mode
         if (filePtr == NULL) {
             perror("Error al abrir el archivo");
             return;
@@ -492,7 +489,7 @@ void ajustarRegistros(const string& fileRegistrosNormal, const string& esquema) 
                 
                 campo = ajustarCampo(campo, longitudes[colIndex]);
                 if (!firstField) {
-                    fileLongitudFija << ",";
+                    fileLongitudFija << " , ";
                 }
                 fileLongitudFija << campo;
                 firstField = false;
@@ -715,6 +712,7 @@ void menuDisco(Disco &disco, BPlusTree* Btree) {
                     disco.llenarRegistrosSector("../Archivos/" + recordsFixed, "../Archivos/" + schema, Btree);
                     disco.crearBloques(capacidadBloques, capacidadSectores, sectores);
                     disco.calcularEspacioLibreEnTodosLosBloques(capacidadBloques);
+                    disco.calcularCapacidadRestante(capacidadBloques);
                 }
                 else {
                     cout << "Ya existe un Disco existente." << endl;
@@ -790,7 +788,7 @@ int main() {
                 break;
             }
             case 4: {
-                menuBuffer(bufferManagerPrincipal);
+                menuBuffer(Btree, bufferManagerPrincipal);
                 break;
             }
             case 5: {
